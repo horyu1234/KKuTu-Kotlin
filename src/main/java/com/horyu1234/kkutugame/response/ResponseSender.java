@@ -1,4 +1,4 @@
-package com.horyu1234.kkutu_game.response;
+package com.horyu1234.kkutugame.response;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;

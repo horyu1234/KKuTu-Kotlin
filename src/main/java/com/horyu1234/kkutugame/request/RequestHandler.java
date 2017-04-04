@@ -1,4 +1,4 @@
-package com.horyu1234.kkutu_game.request;
+package com.horyu1234.kkutugame.request;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

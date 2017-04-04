@@ -1,12 +1,12 @@
-package com.horyu1234.kkutu_game.controller;
+package com.horyu1234.kkutugame.controller;
 
-import com.horyu1234.kkutu_game.Channel;
-import com.horyu1234.kkutu_game.LoginType;
-import com.horyu1234.kkutu_game.request.FistBumpRequest;
-import com.horyu1234.kkutu_game.request.HandShakeRequest;
-import com.horyu1234.kkutu_game.request.RequestHandler;
-import com.horyu1234.kkutu_game.response.HandShakeResponse;
-import com.horyu1234.kkutu_game.response.ResponseSender;
+import com.horyu1234.kkutugame.Channel;
+import com.horyu1234.kkutugame.LoginType;
+import com.horyu1234.kkutugame.request.FistBumpRequest;
+import com.horyu1234.kkutugame.request.HandShakeRequest;
+import com.horyu1234.kkutugame.request.RequestHandler;
+import com.horyu1234.kkutugame.response.HandShakeResponse;
+import com.horyu1234.kkutugame.response.ResponseSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.WebSocketSession;

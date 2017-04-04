@@ -1,4 +1,4 @@
-package com.horyu1234.kkutu_game.request;
+package com.horyu1234.kkutugame.request;
 
 /**
  * Created by horyu on 2017-03-27.

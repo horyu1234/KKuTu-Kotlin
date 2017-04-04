@@ -1,8 +1,8 @@
-package com.horyu1234.kkutu_game;
+package com.horyu1234.kkutugame;
 
 import com.google.gson.Gson;
-import com.horyu1234.kkutu_game.request.JSONRequest;
-import com.horyu1234.kkutu_game.request.RequestHandler;
+import com.horyu1234.kkutugame.request.JSONRequest;
+import com.horyu1234.kkutugame.request.RequestHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import java.util.*;
  */
 @Component
 public class Dispatcher {
-    private final String MAIN_PACKAGE = "com.horyu1234.kkutu_game";
+    private final String MAIN_PACKAGE = "com.horyu1234.kkutugame";
     private Gson gson;
     private ApplicationContext applicationContext;
     private Logger logger;

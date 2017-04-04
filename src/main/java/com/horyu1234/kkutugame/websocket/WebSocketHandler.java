@@ -1,6 +1,6 @@
-package com.horyu1234.kkutu_game.websocket;
+package com.horyu1234.kkutugame.websocket;
 
-import com.horyu1234.kkutu_game.Dispatcher;
+import com.horyu1234.kkutugame.Dispatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.horyu1234.kkutu_game;
+package com.horyu1234.kkutugame;
 
 import com.google.gson.Gson;
 import org.springframework.boot.SpringApplication;

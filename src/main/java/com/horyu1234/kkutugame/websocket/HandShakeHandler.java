@@ -1,4 +1,4 @@
-package com.horyu1234.kkutu_game.websocket;
+package com.horyu1234.kkutugame.websocket;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpRequest;

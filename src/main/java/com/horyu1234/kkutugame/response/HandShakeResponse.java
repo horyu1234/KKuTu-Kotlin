@@ -1,6 +1,6 @@
-package com.horyu1234.kkutu_game.response;
+package com.horyu1234.kkutugame.response;
 
-import com.horyu1234.kkutu_game.Channel;
+import com.horyu1234.kkutugame.Channel;
 
 import java.util.List;
 

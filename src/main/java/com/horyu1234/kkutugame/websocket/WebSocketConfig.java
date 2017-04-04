@@ -1,4 +1,4 @@
-package com.horyu1234.kkutu_game.websocket;
+package com.horyu1234.kkutugame.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;

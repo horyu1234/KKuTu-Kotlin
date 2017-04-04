@@ -1,4 +1,4 @@
-package com.horyu1234.kkutu_game;
+package com.horyu1234.kkutugame;
 
 /**
  * Created by horyu on 2017-03-27.
