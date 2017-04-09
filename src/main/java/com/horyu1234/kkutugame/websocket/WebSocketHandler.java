@@ -26,7 +26,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        WSSessionFactory.webSocketSessions.add(session);
+        WSSessionFactory.getWebSocketSessions().add(session);
     }
 
     @Override
@@ -38,12 +38,12 @@ public class WebSocketHandler extends TextWebSocketHandler {
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         session.close();
 
-        WSSessionFactory.webSocketSessions.remove(session);
+        WSSessionFactory.getWebSocketSessions().remove(session);
         logger.error("WebSocket 에서 오류가 발생하였습니다.", exception);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        WSSessionFactory.webSocketSessions.remove(session);
+        WSSessionFactory.getWebSocketSessions().remove(session);
     }
 }
