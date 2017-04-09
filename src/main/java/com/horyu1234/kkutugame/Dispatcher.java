@@ -38,64 +38,81 @@ public class Dispatcher {
     }
 
     public void mappingController(WebSocketSession webSocketSession, String jsonStr) {
+        // 처음 오는 JSON 을 Type 와 Value 로 이루어진 객체로 변환
+        JSONRequest jsonRequest;
         try {
-            // 처음 오는 JSON 을 Type 와 Value 로 이루어진 객체로 변환
-            JSONRequest jsonRequest;
-            try {
-                jsonRequest = gson.fromJson(jsonStr, JSONRequest.class);
-            } catch (Exception e) {
-                logger.error("초기 JSON 을 JSONRequest 타입으로 변환할 수 없습니다.", e);
-                return;
-            }
-
-            // Type 으로 Request 클래스를 알아내, Value 부분 으로 객체 생성
-            Class requestClass = getRequestClass(jsonRequest.getType());
-            if (requestClass == null) {
-                logger.error("Type 에 해당하는 Request 클래스를 찾을 수 없습니다.");
-                return;
-            }
-
-            // 해당 Request 클래스에 JSON 으로 값 설정
-            String json = jsonRequest.getValue().replace("\\\"", "\"");
-
-            Object requestObj;
-            try {
-                requestObj = gson.fromJson(json, requestClass);
-            } catch (Exception e) {
-                logger.error("값 JSON 을 확인된 Request 타입으로 변환할 수 없습니다.", e);
-                return;
-            }
-
-            // 매핑할 메서드 찾기
-            Map<Method, Class> annotationMethods = getAnnotationMethods(RequestHandler.class);
-            for (Map.Entry<Method, Class> methodEntry : annotationMethods.entrySet()) {
-                Class methodClass = methodEntry.getValue();
-                Method method = methodEntry.getKey();
-
-                List<Object> resultParameters = new ArrayList<>();
-                boolean success = true;
-
-                // 함수 파라미터들
-                for (Parameter parameter : method.getParameters()) {
-                    if (parameter.getType().equals(WebSocketSession.class)) {
-                        resultParameters.add(webSocketSession);
-                    } else if (parameter.getType().equals(requestClass)) {
-                        resultParameters.add(requestObj);
-                    } else {
-                        success = false;
-                    }
-                }
-
-                if (success) {
-                    String methodClassSimpleName = methodClass.getSimpleName();
-                    String methodClassBeanName = methodClassSimpleName.substring(0, 1).toLowerCase() + methodClassSimpleName.substring(1);
-                    Object methodClassBean = applicationContext.getBean(methodClassBeanName);
-
-                    method.invoke(methodClassBean, resultParameters.toArray());
-                }
-            }
+            jsonRequest = gson.fromJson(jsonStr, JSONRequest.class);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("초기 JSON 을 JSONRequest 타입으로 변환할 수 없습니다.", e);
+            return;
+        }
+
+        // Type 으로 Request 클래스를 알아내, Value 부분 으로 객체 생성
+        Class requestClass;
+        try {
+            requestClass = getRequestClass(jsonRequest.getType());
+        } catch (Exception e) {
+            logger.error("Type 에 해당하는 Request 클래스를 찾을 수 없습니다.", e);
+            return;
+        }
+
+        if (requestClass == null) {
+            logger.error("Type 에 해당하는 Request 클래스를 찾을 수 없습니다.");
+            return;
+        }
+
+        // 해당 Request 클래스에 JSON 으로 값 설정
+        String json = jsonRequest.getValue().replace("\\\"", "\"");
+
+        Object requestObj;
+        try {
+            requestObj = gson.fromJson(json, requestClass);
+        } catch (Exception e) {
+            logger.error("값 JSON 을 확인된 Request 타입으로 변환할 수 없습니다.", e);
+            return;
+        }
+
+        // 매핑할 메서드 찾기
+        Map<Method, Class> annotationMethods;
+        try {
+            annotationMethods = getAnnotationMethods(RequestHandler.class);
+        } catch (Exception e) {
+            logger.error("@RequestHandler 어노테이션이 붙은 메서드들을 가져올 수 없습니다.", e);
+            return;
+        }
+
+        for (Map.Entry<Method, Class> methodEntry : annotationMethods.entrySet()) {
+            Class methodClass = methodEntry.getValue();
+            Method method = methodEntry.getKey();
+
+            List<Object> resultParameters = new ArrayList<>();
+            boolean success = true;
+
+            // 함수 파라미터들
+            for (Parameter parameter : method.getParameters()) {
+                if (parameter.getType().equals(WebSocketSession.class)) {
+                    resultParameters.add(webSocketSession);
+                } else if (parameter.getType().equals(requestClass)) {
+                    resultParameters.add(requestObj);
+                } else {
+                    success = false;
+                }
+            }
+
+            if (!success) {
+                logger.error("요청을 매서드에 해당하는 파라미터로 매핑하지 못했습니다.");
+                continue;
+            }
+
+            String methodClassSimpleName = methodClass.getSimpleName();
+            String methodClassBeanName = methodClassSimpleName.substring(0, 1).toLowerCase() + methodClassSimpleName.substring(1);
+            Object methodClassBean = applicationContext.getBean(methodClassBeanName);
+
+            try {
+                method.invoke(methodClassBean, resultParameters.toArray());
+            } catch (Exception e) {
+                logger.error("메서드를 호출하지 못했습니다.", e);
+            }
         }
     }
 
