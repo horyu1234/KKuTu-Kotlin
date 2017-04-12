@@ -1,6 +1,7 @@
 package com.horyu1234.kkutugame.response;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,15 @@ public class ResponseSender {
     }
 
     public void sendResponse(WebSocketSession session, Object object) {
+        String objectSimpleClassName = object.getClass().getSimpleName();
+
         try {
-            String jsonStr = gson.toJson(object);
-            TextMessage message = new TextMessage(jsonStr);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("type", objectSimpleClassName.replace("Response", ""));
+            jsonObject.add("value", gson.toJsonTree(object));
+
+            String json = jsonObject.toString();
+            TextMessage message = new TextMessage(json);
 
             session.sendMessage(message);
         } catch (Exception e) {
