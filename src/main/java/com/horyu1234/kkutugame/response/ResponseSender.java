@@ -25,6 +25,10 @@ public class ResponseSender {
 
     public void sendResponse(WebSocketSession session, Object object) {
         String objectSimpleClassName = object.getClass().getSimpleName();
+        if (!objectSimpleClassName.endsWith("Response")) {
+            logger.error("Response 클래스가 아닌 오브젝트를 응답으로 전송하려 했습니다.");
+            return;
+        }
 
         try {
             JsonObject jsonObject = new JsonObject();
