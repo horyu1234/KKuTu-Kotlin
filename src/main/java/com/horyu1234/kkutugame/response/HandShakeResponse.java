@@ -1,20 +1,21 @@
 package com.horyu1234.kkutugame.response;
 
-import com.horyu1234.kkutugame.Channel;
+import com.horyu1234.kkutugame.LoginType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by horyu on 2017-03-27.
  */
 public class HandShakeResponse {
-    private List<Channel> channels;
+    private List<LoginType> loginTypes;
 
-    public List<Channel> getChannels() {
-        return channels;
+    public HandShakeResponse() {
+        loginTypes = new ArrayList<>();
     }
 
-    public void setChannels(List<Channel> channels) {
-        this.channels = channels;
+    public List<LoginType> getLoginTypes() {
+        return loginTypes;
     }
 }

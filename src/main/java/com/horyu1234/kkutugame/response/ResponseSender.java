@@ -1,7 +1,10 @@
 package com.horyu1234.kkutugame.response;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.horyu1234.kkutugame.LoginType;
+import com.horyu1234.kkutugame.LoginTypeSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,28 +17,45 @@ import org.springframework.web.socket.WebSocketSession;
  */
 @Component
 public class ResponseSender {
-    private Gson gson;
     private Logger logger;
+    private LoginTypeSerializer loginTypeSerializer;
 
     @Autowired
-    public ResponseSender(Gson gson) {
-        this.gson = gson;
+    public ResponseSender(LoginTypeSerializer loginTypeSerializer) {
         this.logger = LoggerFactory.getLogger(this.getClass());
+        this.loginTypeSerializer = loginTypeSerializer;
     }
 
     public void sendResponse(WebSocketSession session, Object object) {
-        String objectSimpleClassName = object.getClass().getSimpleName();
-        if (!objectSimpleClassName.endsWith("Response")) {
-            logger.error("Response 클래스가 아닌 오브젝트를 응답으로 전송하려 했습니다.");
+        JsonObject jsonObject = getJsonObject(object);
+        if (jsonObject == null) {
             return;
         }
 
-        try {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("type", objectSimpleClassName.replace("Response", ""));
-            jsonObject.add("value", gson.toJsonTree(object));
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LoginType.class, loginTypeSerializer);
 
-            String json = jsonObject.toString();
+        Gson objectGson = gsonBuilder.create();
+        jsonObject.add("value", objectGson.toJsonTree(object));
+
+        sendResponse(session, jsonObject.toString());
+    }
+
+    private JsonObject getJsonObject(Object object) {
+        String objectSimpleClassName = object.getClass().getSimpleName();
+        if (!objectSimpleClassName.endsWith("Response")) {
+            logger.error("Response 클래스가 아닌 오브젝트를 응답으로 전송하려 했습니다.");
+            return null;
+        }
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("type", objectSimpleClassName.replace("Response", ""));
+
+        return jsonObject;
+    }
+
+    private void sendResponse(WebSocketSession session, String json) {
+        try {
             TextMessage message = new TextMessage(json);
 
             session.sendMessage(message);

@@ -1,8 +1,7 @@
 package com.horyu1234.kkutugame.controller;
 
-import com.horyu1234.kkutugame.Channel;
 import com.horyu1234.kkutugame.LoginType;
-import com.horyu1234.kkutugame.request.FistBumpRequest;
+import com.horyu1234.kkutugame.dao.LoginTypeDAO;
 import com.horyu1234.kkutugame.request.RequestHandler;
 import com.horyu1234.kkutugame.response.HandShakeResponse;
 import com.horyu1234.kkutugame.response.ResponseSender;
@@ -10,38 +9,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.WebSocketSession;
 
-import java.util.Arrays;
-
 /**
  * Created by horyu on 2017-03-27.
  */
 @Controller
 public class HandShakeController {
     private ResponseSender responseSender;
+    private LoginTypeDAO loginTypeDAO;
 
     @Autowired
-    public HandShakeController(ResponseSender responseSender) {
+    public HandShakeController(ResponseSender responseSender, LoginTypeDAO loginTypeDAO) {
         this.responseSender = responseSender;
+        this.loginTypeDAO = loginTypeDAO;
     }
 
     @RequestHandler
     public void onHandShake(WebSocketSession webSocketSession) {
-        Channel testChannel = new Channel();
-        testChannel.setName("테스트 채널");
-        testChannel.setLoginTypes(Arrays.asList(LoginType.GUEST, LoginType.NAVER));
-        testChannel.setCurrentPlayer(77);
-        testChannel.setMaxPlayers(2000);
-
         HandShakeResponse handShakeResponse = new HandShakeResponse();
-        handShakeResponse.setChannels(Arrays.asList(testChannel));
+        for (LoginType loginType : loginTypeDAO.getLoginTypes()) {
+            handShakeResponse.getLoginTypes().add(loginType);
+        }
 
         responseSender.sendResponse(webSocketSession, handShakeResponse);
-    }
-
-    @RequestHandler
-    public void onFistBump(WebSocketSession webSocketSession, FistBumpRequest fistBumpRequest) {
-        String handShake = fistBumpRequest.getHandShake();
-
-        responseSender.sendResponse(webSocketSession, new FistBumpRequest());
     }
 }
