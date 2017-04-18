@@ -1,7 +1,7 @@
 package com.horyu1234.kkutugame.response;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.horyu1234.kkutugame.LoginType;
 import com.horyu1234.kkutugame.LoginTypeSerializer;
@@ -18,43 +18,38 @@ import org.springframework.web.socket.WebSocketSession;
 @Component
 public class ResponseSender {
     private Logger logger;
-    private LoginTypeSerializer loginTypeSerializer;
+    private GsonBuilder gsonBuilder;
 
     @Autowired
     public ResponseSender(LoginTypeSerializer loginTypeSerializer) {
         this.logger = LoggerFactory.getLogger(this.getClass());
-        this.loginTypeSerializer = loginTypeSerializer;
+
+        gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LoginType.class, loginTypeSerializer);
     }
 
+    /**
+     * 응답을 전송합니다.
+     *
+     * @param session 웹 소켓 세션
+     * @param object  Response 객체
+     */
     public void sendResponse(WebSocketSession session, Object object) {
-        JsonObject jsonObject = getJsonObject(object);
-        if (jsonObject == null) {
+        String json = getResponseJson(object, getJsonElement(object));
+        if (json == null) {
             return;
         }
 
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(LoginType.class, loginTypeSerializer);
-
-        Gson objectGson = gsonBuilder.create();
-        jsonObject.add("value", objectGson.toJsonTree(object));
-
-        sendResponse(session, jsonObject.toString());
+        sendJsonText(session, json);
     }
 
-    private JsonObject getJsonObject(Object object) {
-        String objectSimpleClassName = object.getClass().getSimpleName();
-        if (!objectSimpleClassName.endsWith("Response")) {
-            logger.error("Response 클래스가 아닌 오브젝트를 응답으로 전송하려 했습니다.");
-            return null;
-        }
-
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("type", objectSimpleClassName.replace("Response", ""));
-
-        return jsonObject;
-    }
-
-    private void sendResponse(WebSocketSession session, String json) {
+    /**
+     * 응답을 전송합니다.
+     *
+     * @param session 웹 소켓 세션
+     * @param json    Json 문자열
+     */
+    public void sendJsonText(WebSocketSession session, String json) {
         try {
             TextMessage message = new TextMessage(json);
 
@@ -63,4 +58,37 @@ public class ResponseSender {
             logger.error("WebSocket 로 응답을 전송하는 중 오류가 발생하였습니다.", e);
         }
     }
+
+    /**
+     * 응답 JsonElement 를 가져옵니다.
+     *
+     * @param object Response 객체
+     * @return 응답 JsonElement
+     */
+    public JsonElement getJsonElement(Object object) {
+        return gsonBuilder.create().toJsonTree(object);
+    }
+
+    /**
+     * 최종 Json 문자열을 가져옵니다.
+     *
+     * @param object      Response 객체
+     * @param jsonElement 응답 JsonElement
+     * @return 최종 Json 문자열
+     */
+    public String getResponseJson(Object object, JsonElement jsonElement) {
+        String objectSimpleClassName = object.getClass().getSimpleName();
+        if (!objectSimpleClassName.endsWith("Response")) {
+            logger.error("Response 클래스가 아닌 오브젝트를 응답으로 전송하려 했습니다.");
+            return null;
+        }
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("type", objectSimpleClassName.replace("Response", ""));
+        jsonObject.add("value", jsonElement);
+
+        return jsonObject.toString();
+    }
+
+
 }

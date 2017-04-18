@@ -62,8 +62,7 @@ public class Dispatcher {
         }
 
         // 해당 Request 클래스에 JSON 으로 값 설정
-        String json = jsonRequest.getValue().replace("\\\"", "\"");
-
+        String json = jsonRequest.getValue();
         Object requestObj;
         try {
             requestObj = gson.fromJson(json, requestClass);
