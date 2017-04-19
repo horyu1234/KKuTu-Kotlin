@@ -1,5 +1,11 @@
 package com.horyu1234.kkutugame;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  * Created by horyu on 2017-03-27.
  */
@@ -45,8 +51,19 @@ public class LoginType {
 
     public String getLoginURL() {
         return oauthUrl
-                .replace("@client_id@", clientId)
-                .replace("@redirect_url@", redirectUrl)
-                .replace("@scope@", scope == null ? "" : scope);
+                .replace("@client_id@", encodeURL(clientId))
+                .replace("@redirect_url@", encodeURL(redirectUrl))
+                .replace("@scope@", scope == null ? "" : encodeURL(scope));
+    }
+
+    private String encodeURL(String url) {
+        try {
+            return URLEncoder.encode(url, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Logger logger = LoggerFactory.getLogger(this.getClass());
+            logger.error("URL Encode 중 오류가 발생하였습니다.", e);
+
+            return url;
+        }
     }
 }
