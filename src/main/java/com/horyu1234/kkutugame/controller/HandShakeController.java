@@ -29,15 +29,15 @@ import java.util.Map;
 public class HandShakeController {
     private ResponseSender responseSender;
     private LoginTypeDAO loginTypeDAO;
-    private Map<String, String> fistBump;
-    private Map<String, Long> fistBumpTime;
+    private Map<String, String> fistBumps;
+    private Map<String, Long> fistBumpTimes;
 
     @Autowired
     public HandShakeController(ResponseSender responseSender, LoginTypeDAO loginTypeDAO) {
         this.responseSender = responseSender;
         this.loginTypeDAO = loginTypeDAO;
-        this.fistBump = new HashMap<>();
-        this.fistBumpTime = new HashMap<>();
+        this.fistBumps = new HashMap<>();
+        this.fistBumpTimes = new HashMap<>();
     }
 
     @RequestHandler
@@ -57,17 +57,17 @@ public class HandShakeController {
 
         responseSender.sendJsonText(session, json);
 
-        fistBump.put(session.getId(), jsonElement.toString());
-        fistBumpTime.put(session.getId(), System.currentTimeMillis());
+        fistBumps.put(session.getId(), jsonElement.toString());
+        fistBumpTimes.put(session.getId(), System.currentTimeMillis());
     }
 
     @RequestHandler
     public void onFistBump(WebSocketSession session, FistBumpRequest fistBumpRequest) {
-        if (!fistBump.containsKey(session.getId())) {
+        if (!fistBumps.containsKey(session.getId())) {
             return;
         }
 
-        String originHandShake = fistBump.get(session.getId());
+        String originHandShake = fistBumps.get(session.getId());
 
         System.out.println("originHandShake: " + originHandShake);
         System.out.println("fistBumpRequest.getHandShake(): " + fistBumpRequest.getHandShake());
@@ -82,21 +82,23 @@ public class HandShakeController {
             responseSender.sendResponse(session, new ErrorResponse(Error.FIST_BUMP_FAIL));
         }
 
-        fistBump.remove(session.getId());
-        fistBumpTime.remove(session.getId());
+        fistBumps.remove(session.getId());
+        fistBumpTimes.remove(session.getId());
     }
 
     @Scheduled(fixedDelay = 500L)
     public void checkFistBumpTimeOut() {
-        for (String session : fistBumpTime.keySet()) {
-            long time = fistBumpTime.get(session);
+        for (Map.Entry<String, Long> fistBumpTime : fistBumpTimes.entrySet()) {
+            String sessionId = fistBumpTime.getKey();
+            long time = fistBumpTime.getValue();
+
             if (time + 3000 < System.currentTimeMillis()) {
                 // 시간 초과
-                fistBump.remove(session);
-                fistBumpTime.remove(session);
+                fistBumps.remove(sessionId);
+                fistBumpTimes.remove(sessionId);
 
                 responseSender.sendResponse(
-                        WSSessionFactory.getWebSocketSession(session),
+                        WSSessionFactory.getWebSocketSession(sessionId),
                         new ErrorResponse(Error.FIST_BUMP_TIME_OUT));
             }
         }
