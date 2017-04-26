@@ -1,9 +1,10 @@
-package com.horyu1234.kkutugame;
+package com.horyu1234.kkutugame.jsonserializer;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.horyu1234.kkutugame.LoginType;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Type;

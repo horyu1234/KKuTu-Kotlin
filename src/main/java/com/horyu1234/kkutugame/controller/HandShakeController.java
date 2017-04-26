@@ -1,14 +1,17 @@
 package com.horyu1234.kkutugame.controller;
 
 import com.google.gson.JsonElement;
+import com.horyu1234.kkutugame.Error;
 import com.horyu1234.kkutugame.LoginType;
 import com.horyu1234.kkutugame.dao.LoginTypeDAO;
 import com.horyu1234.kkutugame.request.FistBumpRequest;
 import com.horyu1234.kkutugame.request.HandShakeRequest;
 import com.horyu1234.kkutugame.request.RequestHandler;
+import com.horyu1234.kkutugame.response.ErrorResponse;
 import com.horyu1234.kkutugame.response.FistBumpResponse;
 import com.horyu1234.kkutugame.response.HandShakeResponse;
 import com.horyu1234.kkutugame.response.ResponseSender;
+import com.horyu1234.kkutugame.websocket.WSSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -76,7 +79,7 @@ public class HandShakeController {
             responseSender.sendResponse(session, new FistBumpResponse());
         } else {
             // 실패
-            System.out.println("실패");
+            responseSender.sendResponse(session, new ErrorResponse(Error.FIST_BUMP_FAIL));
         }
 
         fistBump.remove(session.getId());
@@ -89,10 +92,12 @@ public class HandShakeController {
             long time = fistBumpTime.get(session);
             if (time + 3000 < System.currentTimeMillis()) {
                 // 시간 초과
-                System.out.println("시간 초과");
-
                 fistBump.remove(session);
                 fistBumpTime.remove(session);
+
+                responseSender.sendResponse(
+                        WSSessionFactory.getWebSocketSession(session),
+                        new ErrorResponse(Error.FIST_BUMP_TIME_OUT));
             }
         }
     }

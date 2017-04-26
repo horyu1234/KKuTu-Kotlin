@@ -22,4 +22,13 @@ public class WSSessionFactory {
     public static List<WebSocketSession> getWebSocketSessions() {
         return webSocketSessions;
     }
+
+    public static WebSocketSession getWebSocketSession(String sessionId) {
+        for (WebSocketSession webSocketSession : webSocketSessions) {
+            if (webSocketSession.getId().equals(sessionId)) {
+                return webSocketSession;
+            }
+        }
+        return null;
+    }
 }

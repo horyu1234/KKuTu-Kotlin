@@ -3,8 +3,10 @@ package com.horyu1234.kkutugame.response;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.horyu1234.kkutugame.Error;
 import com.horyu1234.kkutugame.LoginType;
-import com.horyu1234.kkutugame.LoginTypeSerializer;
+import com.horyu1234.kkutugame.jsonserializer.ErrorSerializer;
+import com.horyu1234.kkutugame.jsonserializer.LoginTypeSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +23,12 @@ public class ResponseSender {
     private GsonBuilder gsonBuilder;
 
     @Autowired
-    public ResponseSender(LoginTypeSerializer loginTypeSerializer) {
+    public ResponseSender(LoginTypeSerializer loginTypeSerializer, ErrorSerializer errorSerializer) {
         this.logger = LoggerFactory.getLogger(this.getClass());
 
         gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(LoginType.class, loginTypeSerializer);
+        gsonBuilder.registerTypeAdapter(Error.class, errorSerializer);
     }
 
     /**
@@ -89,6 +92,4 @@ public class ResponseSender {
 
         return jsonObject.toString();
     }
-
-
 }
