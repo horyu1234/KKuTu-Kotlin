@@ -11,14 +11,15 @@ import java.net.URLEncoder;
  */
 public class LoginType {
     private String name;
-    private String oauthUrl;
+    private String oauthAuthUrl;
+    private String oauthTokenUrl;
     private String clientId;
     private String redirectUrl;
     private String scope;
     private String secretKey;
 
-    public void setOauthUrl(String oauthUrl) {
-        this.oauthUrl = oauthUrl;
+    public void setOauthAuthUrl(String oauthAuthUrl) {
+        this.oauthAuthUrl = oauthAuthUrl;
     }
 
     public void setClientId(String clientId) {
@@ -49,8 +50,16 @@ public class LoginType {
         this.secretKey = secretKey;
     }
 
+    public String getOauthTokenUrl() {
+        return oauthTokenUrl;
+    }
+
+    public void setOauthTokenUrl(String oauthTokenUrl) {
+        this.oauthTokenUrl = oauthTokenUrl;
+    }
+
     public String getLoginURL() {
-        return oauthUrl
+        return oauthAuthUrl
                 .replace("@client_id@", encodeURL(clientId))
                 .replace("@redirect_url@", encodeURL(redirectUrl))
                 .replace("@scope@", scope == null ? "" : encodeURL(scope));
