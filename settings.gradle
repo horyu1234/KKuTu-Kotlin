@@ -1,1 +1,3 @@
-rootProject.name = 'kkutu-game'
+rootProject.name = 'KKuTu-Java'
+
+include 'KKuTu-Game', 'KKuTu-Web'
