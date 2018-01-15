@@ -2,5 +2,6 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
+    compile group: 'com.googlecode.htmlcompressor', name: 'htmlcompressor', version: '1.5.2'
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
