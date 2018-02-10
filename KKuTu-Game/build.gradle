@@ -1,4 +1,5 @@
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter'
+    
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }
