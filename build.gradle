@@ -1,3 +1,6 @@
+group 'com.horyu1234'
+version = '0.0.1-SNAPSHOT'
+
 buildscript {
     ext {
         springBootVersion = '1.5.9.RELEASE'
@@ -7,15 +10,14 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath group: 'org.sonarsource.scanner.gradle', name: 'sonarqube-gradle-plugin', version: '2.6.2'
     }
 }
+apply plugin: "org.sonarqube"
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
-
-    group 'com.horyu1234'
-    version = '0.0.1-SNAPSHOT'
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
