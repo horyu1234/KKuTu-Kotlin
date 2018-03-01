@@ -11,13 +11,13 @@ import java.io.PrintWriter;
 public class CharResponseWrapper extends HttpServletResponseWrapper {
     private final CharArrayWriter output = new CharArrayWriter();
 
+    CharResponseWrapper(HttpServletResponse response) {
+        super(response);
+    }
+
     @Override
     public String toString() {
         return output.toString();
-    }
-
-    CharResponseWrapper(HttpServletResponse response) {
-        super(response);
     }
 
     @Override

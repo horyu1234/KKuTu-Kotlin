@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 public class MinifyConfig {
     @Bean
     public FilterRegistrationBean getFilterRegistrationBean() {
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(new MinifyFilter());
-        return filterRegistrationBean;
+        return new FilterRegistrationBean(new MinifyFilter());
     }
 }

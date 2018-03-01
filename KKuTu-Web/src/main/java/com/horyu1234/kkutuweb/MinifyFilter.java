@@ -32,6 +32,6 @@ public class MinifyFilter implements Filter {
 
     @Override
     public void destroy() {
-
+        // nothing
     }
 }
