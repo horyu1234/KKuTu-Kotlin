@@ -1,5 +1,17 @@
+version = '0.0.1-SNAPSHOT'
+
+jar {
+    manifest {
+        attributes 'Title': 'KKuTu-Game', 'Version': version, 'Main-Class': 'com.horyu1234.kkutugame.KKuTuGameApplication'
+    }
+    baseName = 'KKuTu-Game'
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter'
-    
+
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }
