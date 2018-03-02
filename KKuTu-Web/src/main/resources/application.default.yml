@@ -1,0 +1,7 @@
+server.port: 9000
+
+server.compression.enabled: true
+server.compression.mime-types: text/html,text/css,application/javascript
+server.compression.min-response-size: 2048
+
+spring.thymeleaf.cache: true
