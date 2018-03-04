@@ -10,7 +10,7 @@ import org.springframework.context.annotation.PropertySource;
  */
 @Configuration
 @PropertySource(
-        value = "file:${app.home}/" + KKuTuWebApplication.SETTING_FILE_NAME + ".yml",
+        value = "file:${app.home}/config/" + KKuTuWebApplication.SETTING_FILE_NAME + ".yml",
         factory = YamlPropertySourceFactory.class
 )
 public class ExternalSettingConfig {
