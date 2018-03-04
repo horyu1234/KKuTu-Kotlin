@@ -1,0 +1,14 @@
+server:
+  port: 9000
+  compression:
+    enabled: true
+    mime-types: text/html,text/css,application/javascript
+    min-response-size: 2048
+
+spring:
+  thymeleaf:
+    prefix: file:///${app.home}/public/templates/
+    cache: false
+  resources:
+    static-locations: file:///${app.home}/public/static/
+    cache-period: 0
