@@ -11,10 +11,12 @@ jar {
 }
 
 dependencies {
-    compile group: 'com.googlecode.htmlcompressor', name: 'htmlcompressor', version: '1.5.2'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+
+    compile group: 'com.googlecode.htmlcompressor', name: 'htmlcompressor', version: '1.5.2'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }
