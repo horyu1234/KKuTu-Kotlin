@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${locale['layout.title']}"></title>
+
+    <meta charset="UTF-8"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="description" content="" th:attr="content=${locale['layout.meta.description']}"/>
+    <meta name="keywords" content="" th:attr="content=${locale['layout.meta.keywords']}"/>
+
+    <meta property="og:image" content="" th:attr="content=${locale['layout.meta.image']}"/>
+    <meta property="og:url" content="" th:attr="content=${locale['layout.meta.url']}"/>
+    <meta property="og:title" content="" th:attr="content=${locale['layout.meta.title']}"/>
+    <meta property="og:description" content="" th:attr="content=${locale['layout.meta.description']}"/>
+
+    <link rel="stylesheet" th:href="@{/lib/fontawesome/css/fontawesome-all.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/font.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/navbar.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.min.css}"/>
+</head>
+<body>
+<div class="navbar">
+    <div class="navbar-btn">
+        <i class="fas fa-home"></i>
+    </div>
+    <div class="navbar-right">
+        <div class="navbar-link">
+            <a><i class="fas fa-sign-in-alt"></i> <a th:text="${locale['layout.navbar.login']}" th:remove="tag">로그인</a></a>
+        </div>
+    </div>
+</div>
+<div th:include="${viewName}" th:remove="tag" th:with="locale=${locale}"></div>
+<div class="footer-legal" th:utext="${locale['layout.footer.legal']}"></div>
+</body>
+</html>

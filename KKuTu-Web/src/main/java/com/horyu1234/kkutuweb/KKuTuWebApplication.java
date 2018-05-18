@@ -17,6 +17,11 @@ public class KKuTuWebApplication {
     public static void main(String[] args) {
         setStartupDirSystemProperty();
         copyResourcesIfNotExist();
+        
+        System.out.println("");
+        //System.out.println("");
+        String fffff;
+        String ggggg;
 
         SpringApplication.run(KKuTuWebApplication.class, args);
     }

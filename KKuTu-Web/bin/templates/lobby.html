@@ -1,0 +1,46 @@
+<link rel="stylesheet" th:href="@{/css/lobby.min.css}"/>
+
+<div class="lobby-background"></div>
+<div class="container" xmlns:th="http://www.thymeleaf.org">
+    <div class="start-button-container">
+        <div class="game-logo">
+            <a class="logo-text" th:text="${locale['lobby.logo.text']}"></a>
+            <img class="logo-img" th:src="@{/img/kkutuShortLogo.png}" src=""/>
+        </div>
+        <div class="jjoriping">
+            <img class="jjo-obj jjo-eye-left" th:src="@{/img/jjoriping/jjoEyeLeft.png}" src=""/>
+            <img class="jjo-obj jjo-nose" th:src="@{/img/jjoriping/jjoNose.png}" src=""/>
+            <img class="jjo-obj jjo-eye-right" th:src="@{/img/jjoriping/jjoEyeRight.png}" src=""/>
+            <div class="jjo-display-bar">
+                <button class="jjo-display-btn" id="game-start" th:text="${locale['lobby.game-start']}">게임 시작</button>
+            </div>
+        </div>
+    </div>
+    <div class="channel-list-box">
+        <h3 class="channel-list-title">
+            <a id="channel-list-refresh-btn"><i class="fas fa-sync-alt"></i></a> <a
+                th:text="${locale['lobby.channel-list.title']}" th:remove="tag"></a> <a id="channel-total">&nbsp;총
+            0명</a>
+        </h3>
+        <div id="channel-list">
+            <!-- TODO: 제대로된 데이터를 불러오도록 수정 -->
+            <div class="channel" id="channel-0">
+                <div class="channel-status channel-status-icon-offline"></div>
+                <div class="channel-name">감자 (손님가능)</div>
+                <div class="channel-people graph">
+                    <div class="graph-bar" style="width: 0;"></div>
+                    <label>-</label></div>
+                <div class="channel-enter">접속</div>
+            </div>
+            <div class="channel" id="channel-1">
+                <div class="channel-status channel-status-icon-offline"></div>
+                <div class="channel-name">냉이</div>
+                <div class="channel-people graph">
+                    <div class="graph-bar" style="width: 0;"></div>
+                    <label>-</label></div>
+                <div class="channel-enter">접속</div>
+            </div>
+        </div>
+    </div>
+    <iframe class="bulletin-frame" th:src="@{/bulletin.html}"></iframe>
+</div>
