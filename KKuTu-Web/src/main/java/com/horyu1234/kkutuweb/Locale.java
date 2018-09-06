@@ -3,6 +3,7 @@ package com.horyu1234.kkutuweb;
 import org.apache.log4j.Logger;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -51,7 +52,7 @@ public class Locale {
 
     private static String getEncodedString(String original) {
         try {
-            return new String(original.getBytes("8859_1"), "UTF-8");
+            return new String(original.getBytes("8859_1"), StandardCharsets.UTF_8);
         } catch (UnsupportedEncodingException e) {
             LOGGER.error(e);
         }
